@@ -1,0 +1,9 @@
+version: '3'
+services:
+  app:
+    image: your-dockerhub-username/weather_app:latest
+    restart: unless-stopped
+    env_file:
+      - weather_app-env
+    ports:
+      - "3000:3000"

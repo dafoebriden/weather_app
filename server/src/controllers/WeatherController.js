@@ -6,11 +6,21 @@ export class WeatherController extends BaseController {
         super('api/weather')
         this.router
             .get('/current', this.getCurrentWeatherInfo)
+            .get('/today', this.getTodaysWeatherInfo)
             .get('/forecast', this.getForecastWeatherInfo)
     }
     async getCurrentWeatherInfo(req, res, next) {
         try {
             const weather = await weatherService.getCurrentWeatherInfo(req.query)
+            res.send(weather)
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+    async getTodaysWeatherInfo(req, res, next) {
+        try {
+            const weather = await weatherService.getTodaysWeatherInfo(req.query)
             res.send(weather)
         }
         catch (error) {

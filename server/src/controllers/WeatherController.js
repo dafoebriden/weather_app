@@ -1,5 +1,7 @@
+import { HttpStatusCode } from "axios";
 import { weatherService } from "../services/WeatherService";
 import BaseController from "../utils/BaseController";
+import { BadRequest } from "../utils/Errors";
 
 export class WeatherController extends BaseController {
     constructor() {
@@ -15,6 +17,9 @@ export class WeatherController extends BaseController {
             res.send(weather)
         }
         catch (error) {
+            if (error.message.includes('400')) {
+                res.send('Bad Request')
+            }
             next(error);
         }
     }
@@ -24,7 +29,10 @@ export class WeatherController extends BaseController {
             res.send(weather)
         }
         catch (error) {
-            next(error);
+            if (error.message.includes('400')) {
+                res.send('Bad Request')
+                next(error);
+            }
         }
     }
     async getForecastWeatherInfo(req, res, next) {
@@ -33,7 +41,10 @@ export class WeatherController extends BaseController {
             res.send(weather)
         }
         catch (error) {
-            next(error);
+            if (error.message.includes('400')) {
+                res.send('Bad Request')
+                next(error);
+            }
         }
     }
 }

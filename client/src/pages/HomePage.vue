@@ -2,7 +2,7 @@
   <div class="container text-white mx-lg-5" v-if="weather">
     <div class="row justify-content-between my-5">
       <div class="col-12">
-        <p class="mb-0 text-light">Now</p>
+        <p class="mb-0 fw-bold">Now</p>
       </div>
       <div class="col-3">
         <div v-if="selectedTempC" class="mainTempText">
@@ -36,7 +36,7 @@
     <div class="row">
       <p class="fw-bold">3-day forecast</p>
     </div>
-    <div class="row">
+    <div class="row mb-3">
       <div v-for="DF in ForecastDays" :key="DF" class="col-12 dailyForecast">
         <p class="m-0">{{ DF.date }}</p>
         <img :src="DF.day.condition.icon" alt="">
@@ -51,7 +51,7 @@
         <div class="">
           <p class="fs-4 fw-bold">Wind</p>
           <p class="m-0"> <span class="fs-2">{{ weather.windMPH }} </span> mph</p>
-          <p class="m-0"> <span class="fs-5">{{ weather.gustMPH }} </span> gusts</p>
+          <p class="m-0"> <span class="fs-5">{{ weather.gustMPH }} </span>mph gusts</p>
           <p class="m-auto fs-5">{{ weather.windDirection }}</p>
         </div>
         <div>
@@ -81,7 +81,7 @@
       </div>
       <div class="col-5 currentConditions">
         <div class="">
-          <p>Pressure</p>
+          <p class="fs-3 fw-bold">Pressure</p>
           <p class="m-0 fs-3">{{ weather.current?.pressure_in }}</p>
           <p class="m-auto fs-5">inHg</p>
         </div>
@@ -119,7 +119,10 @@ export default {
     })
     async function getWeather() {
       try {
-        await weatherService.getCurrentWeather()
+        const res = await weatherService.getCurrentWeather()
+        if (res == 'return') {
+          return
+        }
         await weatherService.getTodaysWeather()
         await weatherService.getForecast()
       }

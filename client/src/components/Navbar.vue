@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar d-flex justify-content-between navbar-expand-sm px-3">
-    <form @submit="getWeatherData()" style="height: 100%;"> <input class="searchBar rounded-pill" type="text"
-        :placeholder="`${weather.locationName}, ${weather.locationRegion}`">
+    <form @submit.prevent="getWeatherData()" style="height: 100%;"> <input v-model="searchData"
+        class="searchBar rounded-pill" type="text" :placeholder="`${weather.locationName}, ${weather.locationRegion}`">
     </form>
     <div>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
@@ -31,7 +31,7 @@ import Pop from '../utils/Pop.js';
 import { weatherService } from '../services/WeatherService.js';
 export default {
   setup() {
-
+    let searchData = ref('')
     const theme = ref(loadState('theme') || 'light')
 
     onMounted(() => {
@@ -39,9 +39,10 @@ export default {
     })
     async function getWeatherData() {
       try {
-        await weatherService.getCurrentWeather()
-        await weatherService.getTodaysWeather()
-        await weatherService.getForecast()
+        await weatherService.getCurrentWeather(searchData.value)
+        await weatherService.getTodaysWeather(searchData.value)
+        await weatherService.getForecast(searchData.value)
+        searchData.value = ''
       }
       catch (error) {
         Pop.error(error);
@@ -49,6 +50,7 @@ export default {
     }
     return {
       theme,
+      searchData,
       weather: computed(() => AppState.currentWeather),
       getWeatherData,
       toggleTheme() {

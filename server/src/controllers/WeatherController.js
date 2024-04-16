@@ -1,7 +1,6 @@
 import { HttpStatusCode } from "axios";
 import { weatherService } from "../services/WeatherService";
 import BaseController from "../utils/BaseController";
-import { BadRequest } from "../utils/Errors";
 
 export class WeatherController extends BaseController {
     constructor() {
@@ -47,4 +46,5 @@ export class WeatherController extends BaseController {
             }
         }
     }
+
 }

@@ -3,6 +3,7 @@ import { createServer } from 'http'
 import { Startup } from './Startup'
 import { MongoDbConnection, WeatherAPIConnection } from './db/DbConfig'
 import { logger } from './utils/Logger'
+import './utils/Mailer'
 
 // create server & socketServer
 const app = express()

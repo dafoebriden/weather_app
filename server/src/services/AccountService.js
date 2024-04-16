@@ -51,6 +51,10 @@ class AccountService {
     await mergeSubsIfNeeded(account, user)
     return account
   }
+  async getAllAccounts() {
+    let accounts = await mongoDbContext.Account.find()
+    return accounts
+  }
 
   /**
    *  @param {any} user 

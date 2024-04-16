@@ -8,6 +8,15 @@ export const AppState = reactive({
 
   /** @type {import('./models/Weather.js').Weather} */
   // @ts-ignore
-  weather: {}
+  currentWeather: {},
+
+  /** @type {import('./models/Weather.js').Weather} */
+  // @ts-ignore
+  todaysWeather: {},
+
+  /** @type {import('./models/Weather.js').Weather} */
+  // @ts-ignore
+  forecastedWeather: {}
+
   
 })

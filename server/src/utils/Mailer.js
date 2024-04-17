@@ -1,8 +1,8 @@
 import { accountService } from "../services/AccountService"
 import { weatherService } from "../services/WeatherService"
 import { logger } from "./Logger"
-const nodemailer = require('nodemailer')
 const Mailgen = require('mailgen')
+const nodemailer = require('nodemailer')
 const cron = require('node-cron');
 
 cron.schedule('*/30 * * * *', async () => {

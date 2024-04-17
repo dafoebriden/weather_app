@@ -1,8 +1,13 @@
 <template>
   <nav class="navbar d-flex justify-content-between navbar-expand-sm px-3">
-    <form @submit.prevent="getWeatherData()" style="height: 100%;"> <input v-model="searchData"
-        class="searchBar rounded-pill" type="text" :placeholder="`${weather.locationName}, ${weather.locationRegion}`">
-    </form>
+    <div class="d-flex align-items-center" style="height: 100%;">
+      <form @submit.prevent="getWeatherData()" style="height: 100%;"> <input v-model="searchData"
+          class="searchBar rounded-pill me-2" type="text"
+          :placeholder="`${weather.locationName}, ${weather.locationRegion}`">
+      </form>
+      <button v-if="account.id && !location" @click="saveLocation()" class="rounded-pill"
+        style="height: fit-content;">Save</button>
+    </div>
     <div>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
         aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,6 +34,9 @@ import Login from './Login.vue';
 import { AppState } from '../AppState.js';
 import Pop from '../utils/Pop.js';
 import { weatherService } from '../services/WeatherService.js';
+import { logger } from '../utils/Logger';
+import { accountService } from '../services/AccountService';
+import { applyStyles } from '@popperjs/core';
 export default {
   setup() {
     let searchData = ref('')
@@ -37,6 +45,7 @@ export default {
     onMounted(() => {
       document.documentElement.setAttribute('data-bs-theme', theme.value)
     })
+
     async function getWeatherData() {
       try {
         await weatherService.getCurrentWeather(searchData.value)
@@ -45,13 +54,33 @@ export default {
         searchData.value = ''
       }
       catch (error) {
+        logger.log(error)
+        Pop.error(error);
+      }
+    }
+    async function saveLocation() {
+      try {
+        const location = AppState.currentWeather.locationName
+        if (AppState.account.favoriteLocations.includes(location)) {
+          return
+        }
+        AppState.account.favoriteLocations.push(location)
+        const newAccount = AppState.account
+        let data = {}
+        data.favoriteLocations = newAccount.favoriteLocations
+        await accountService.updateAccount(data)
+      }
+      catch (error) {
         Pop.error(error);
       }
     }
     return {
       theme,
       searchData,
+      account: computed(() => AppState.account),
       weather: computed(() => AppState.currentWeather),
+      location: computed(() => AppState.account.favoriteLocations.includes(AppState.currentWeather.locationName)),
+      saveLocation,
       getWeatherData,
       toggleTheme() {
         theme.value = theme.value == 'light' ? 'dark' : 'light'

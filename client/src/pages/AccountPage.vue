@@ -6,7 +6,7 @@
     <h2>Favorite Locations</h2>
     <p>Email updates will automatically be sent for each of your favorite locations</p>
     <div class="d-flex">
-      <div class="location" v-for="location in account.favoriteLocations" :key="location" role="button"
+      <div class="location" v-for="location in account.favoriteLocations" :key="location" role="button" title="Delete"
         @click="removeFavorite(location)">
         {{ location }}
       </div>
@@ -23,6 +23,10 @@ export default {
   setup() {
     async function removeFavorite(location) {
       try {
+        const del = await Pop.confirm('Are you sure you want to delete this favorite?')
+        if (!del) {
+          return
+        }
         const favorites = AppState.account.favoriteLocations
         if (!favorites.includes(location)) {
           return

@@ -5,7 +5,7 @@
           class="searchBar rounded-pill me-2" type="text"
           :placeholder="`${weather.locationName}, ${weather.locationRegion}`">
       </form>
-      <button v-if="account.id && !location" @click="saveLocation()" class="rounded-pill"
+      <button v-if="account.id && !location" @click="saveLocation()" title="Save to Favorites" class="rounded-pill"
         style="height: fit-content;">Save</button>
     </div>
     <div>

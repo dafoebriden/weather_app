@@ -5,7 +5,7 @@ const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
 const cron = require('node-cron');
 
-cron.schedule('*/30 * * * *', async () => {
+cron.schedule('*/1 * * * *', async () => {
     try {
         // const testAccount = await nodemailer.createTestAccount()
         // const transporter = nodemailer.createTransport({
@@ -56,7 +56,7 @@ cron.schedule('*/30 * * * *', async () => {
         let emails = []
         accounts.forEach(account => {
             account.favoriteLocations.forEach(async location => {
-                const weather = await weatherService.getCurrentWeatherInfo()
+                const weather = await weatherService.getCurrentWeatherInfo(location)
                 if (weather?.current?.temp_f >= 90) {
                     let message = {
                         body: {

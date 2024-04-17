@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar d-flex justify-content-between navbar-expand-sm px-3">
-    <div class="d-flex align-items-center" style="height: 100%;">
+    <div v-if="route.name == 'Home'" class="d-flex align-items-center" style="height: 100%;">
       <form @submit.prevent="getWeatherData()" style="height: 100%;"> <input v-model="searchData"
           class="searchBar rounded-pill me-2" type="text"
           :placeholder="`${weather.locationName}, ${weather.locationRegion}`">
@@ -37,8 +37,10 @@ import { weatherService } from '../services/WeatherService.js';
 import { logger } from '../utils/Logger';
 import { accountService } from '../services/AccountService';
 import { applyStyles } from '@popperjs/core';
+import { useRoute } from 'vue-router';
 export default {
   setup() {
+    const route = useRoute()
     let searchData = ref('')
     const theme = ref(loadState('theme') || 'light')
 
@@ -75,6 +77,7 @@ export default {
       }
     }
     return {
+      route,
       theme,
       searchData,
       account: computed(() => AppState.account),
